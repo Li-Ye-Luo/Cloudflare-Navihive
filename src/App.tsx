@@ -71,6 +71,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
+// ⭐ 新增: 导入您创建的 Canvas 动画初始化函数
+import { initStarfield } from './starfield'; 
 // -----------------------------------------------------
 // 🎨 赛博朋克颜色常量定义 (新增)
 // -----------------------------------------------------
@@ -502,6 +504,12 @@ function App() {
     setSortMode(SortMode.None);
     setCurrentSortingGroupId(null);
   }, []);
+
+  // ⭐ 新增: 启动 Canvas 动画
+  useEffect(() => {
+      // 动画应该在 DOM 准备就绪后运行
+      initStarfield();
+  }, []); // 空数组确保只在组件加载时运行一次
 
   // 设置文档标题
   useEffect(() => {
@@ -1088,7 +1096,11 @@ function App() {
           overflow: 'hidden', // 防止背景图片溢出
         }}
       >
-        {/* 背景图片 */}
+        
+        {/* ⭐ 新增: Canvas 元素 - 放置在最外部 Box 内部，但位于内容之前 ⭐ */}
+        <canvas id="starfield" aria-label="动态星空背景"></canvas>
+        
+        {/* 背景图片 (原有的逻辑) */}
         {configs['site.backgroundImage'] && isSecureUrl(configs['site.backgroundImage']) && (
           <>
             <Box
@@ -1966,5 +1978,4 @@ function App() {
     </ThemeProvider>
   );
 }
-
 export default App;

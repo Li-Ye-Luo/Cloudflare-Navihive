@@ -116,3 +116,30 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------- */
+/* 动态星空背景样式 (新增) */
+/* ---------------------------------------------------- */
+
+#starfield {
+    /* 固定在视口，确保它不随内容滚动 */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* 确保它在所有内容之下 */
+    background-color: #000; /* 确保背景是黑色 */
+    display: block; /* 确保元素是块级元素 */
+}
+
+/* 确保主要内容区域的背景是透明的，以便看到星空 */
+/* 注意：您可能需要根据您的 App.tsx 结构修改这个选择器 */
+body {
+    background-color: transparent !important; /* 覆盖默认的 body 背景色 */
+}
+
+/* 如果您的 .with-background-image 区域有其他背景色，也可能需要修改 */
+.with-background-image {
+    background-color: transparent !important;
+}
