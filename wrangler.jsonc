@@ -24,7 +24,7 @@
     "vars": {
         "AUTH_ENABLED": "true",
         "AUTH_USERNAME": "liyeluo",
-        "AUTH_PASSWORD": "zmldd123",
+        //"AUTH_PASSWORD": "zmldd123",
         "AUTH_SECRET": "0XnzLOKRjbLWAw5Zk4QKBGZ65oTVJtQS"
     }
 }
