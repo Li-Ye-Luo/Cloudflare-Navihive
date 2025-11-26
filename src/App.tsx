@@ -71,6 +71,20 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
+// -----------------------------------------------------
+// 🎨 赛博朋克颜色常量定义 (新增)
+// -----------------------------------------------------
+const CYBER_COLORS = {
+  background: '#0a0a1a', // 深蓝黑色
+  paper: '#1a1a2e', // 深紫蓝色，用于卡片/对话框
+  primary: '#00eaff', // 青色霓虹灯 (Primary)
+  secondary: '#ff4d94', // 洋红色霓虹灯 (Secondary)
+  error: '#ff004c', // 红色霓虹灯
+  textPrimary: '#e0e0e0', // 浅灰色，主要文本
+  textSecondary: '#a0a0ff', // 浅蓝/紫色，次要文本
+  border: 'rgba(0, 234, 255, 0.4)', // 柔和青色边框
+};
+
 // 根据环境选择使用真实API还是模拟API
 const isDevEnvironment = import.meta.env.DEV;
 const useRealApi = import.meta.env.VITE_USE_REAL_API === 'true';
@@ -109,12 +123,147 @@ function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  // 创建Material UI主题
+  // -----------------------------------------------------
+  // 🎨 创建Material UI主题 (已修改为赛博朋克风格)
+  // -----------------------------------------------------
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
           mode: darkMode ? 'dark' : 'light',
+          ...(darkMode
+            ? {
+                // 深色模式 (赛博朋克)
+                background: {
+                  default: CYBER_COLORS.background,
+                  paper: CYBER_COLORS.paper,
+                },
+                primary: {
+                  main: CYBER_COLORS.primary,
+                },
+                secondary: {
+                  main: CYBER_COLORS.secondary,
+                },
+                error: {
+                  main: CYBER_COLORS.error,
+                },
+                text: {
+                  primary: CYBER_COLORS.textPrimary,
+                  secondary: CYBER_COLORS.textSecondary,
+                },
+                action: {
+                  hover: 'rgba(0, 234, 255, 0.1)', // 浅青色悬停
+                },
+              }
+            : {
+                // 浅色模式 (保持原样或轻微调整)
+              }),
+        },
+        typography: {
+          // 尝试使用更具科技感的字体，如果未加载则回退
+          fontFamily: [
+            'DSEG', // 赛博数字显示风格，需额外加载
+            'Orbitron', // 科技感字体，需额外加载
+            'monospace', // 通用回退
+            'sans-serif',
+          ].join(','),
+          h3: {
+            // 网站标题，强调霓虹效果
+            textShadow: darkMode ? `0 0 5px ${CYBER_COLORS.primary}, 0 0 10px ${CYBER_COLORS.primary}` : 'none',
+          },
+        },
+        components: {
+          MuiPaper: {
+            styleOverrides: {
+              root: ({ theme }) => ({
+                // 仅在深色模式下应用赛博朋克卡片样式
+                ...(theme.palette.mode === 'dark' && {
+                  borderRadius: '4px',
+                  border: `1px solid ${CYBER_COLORS.border}`,
+                  boxShadow: `0 0 8px rgba(0, 234, 255, 0.2)`,
+                  backdropFilter: 'blur(5px)', // 增加磨砂玻璃效果
+                  backgroundColor: CYBER_COLORS.paper,
+                }),
+              }),
+            },
+          },
+          MuiButton: {
+            styleOverrides: {
+              containedPrimary: ({ theme }) => ({
+                ...(theme.palette.mode === 'dark' && {
+                  // 按钮霓虹效果
+                  boxShadow: `0 0 8px ${CYBER_COLORS.primary}, 0 0 12px rgba(0, 234, 255, 0.4)`,
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    backgroundColor: CYBER_COLORS.primary,
+                    boxShadow: `0 0 10px ${CYBER_COLORS.primary}, 0 0 20px rgba(0, 234, 255, 0.8)`,
+                  },
+                }),
+              }),
+              outlinedPrimary: ({ theme }) => ({
+                ...(theme.palette.mode === 'dark' && {
+                  // 边框霓虹效果
+                  color: CYBER_COLORS.primary,
+                  borderColor: CYBER_COLORS.primary,
+                  boxShadow: `0 0 5px rgba(0, 234, 255, 0.2)`,
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    borderColor: CYBER_COLORS.primary,
+                    backgroundColor: 'rgba(0, 234, 255, 0.1)',
+                    boxShadow: `0 0 10px rgba(0, 234, 255, 0.6)`,
+                  },
+                }),
+              }),
+            },
+          },
+          MuiAlert: {
+            styleOverrides: {
+              filledError: ({ theme }) => ({
+                ...(theme.palette.mode === 'dark' && {
+                  backgroundColor: CYBER_COLORS.error,
+                  boxShadow: `0 0 8px ${CYBER_COLORS.error}`,
+                }),
+              }),
+              filledSuccess: ({ theme }) => ({
+                ...(theme.palette.mode === 'dark' && {
+                  backgroundColor: CYBER_COLORS.primary,
+                  boxShadow: `0 0 8px ${CYBER_COLORS.primary}`,
+                  color: 'white', // 确保文字可读
+                  '& .MuiAlert-icon': {
+                    color: 'white',
+                  },
+                }),
+              }),
+            },
+          },
+          MuiInputBase: {
+             styleOverrides: {
+                root: ({ theme }) => ({
+                  ...(theme.palette.mode === 'dark' && {
+                    // 输入框背景和边框
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                       borderColor: CYBER_COLORS.border,
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: `${CYBER_COLORS.primary} !important`,
+                      boxShadow: `0 0 5px ${CYBER_COLORS.primary}`,
+                    },
+                  }),
+                }),
+             }
+          },
+          MuiDialog: {
+            styleOverrides: {
+              paper: ({ theme }) => ({
+                // 对话框标题和内容保持赛博朋克颜色
+                ...(theme.palette.mode === 'dark' && {
+                  backgroundColor: CYBER_COLORS.paper,
+                  color: CYBER_COLORS.textPrimary,
+                }),
+              }),
+            },
+          },
         },
       }),
     [darkMode]
@@ -917,11 +1066,12 @@ function App() {
           sx={{
             width: '100%',
             whiteSpace: 'pre-line',
-            backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#2e7d32' : undefined),
-            color: (theme) => (theme.palette.mode === 'dark' ? '#fff' : undefined),
+            backgroundColor: (theme) => (theme.palette.mode === 'dark' ? CYBER_COLORS.primary : undefined), // 使用赛博青色
+            color: (theme) => (theme.palette.mode === 'dark' ? 'white' : undefined), // 确保文字是白色
             '& .MuiAlert-icon': {
-              color: (theme) => (theme.palette.mode === 'dark' ? '#fff' : undefined),
+              color: (theme) => (theme.palette.mode === 'dark' ? 'white' : undefined),
             },
+            boxShadow: (theme) => (theme.palette.mode === 'dark' ? `0 0 8px ${CYBER_COLORS.primary}` : undefined), // 霓虹光晕
           }}
         >
           {importResultMessage}
@@ -960,13 +1110,16 @@ function App() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === 'dark'
-                      ? 'rgba(0, 0, 0, ' + (1 - Number(configs['site.backgroundOpacity'])) + ')'
-                      : 'rgba(255, 255, 255, ' +
-                        (1 - Number(configs['site.backgroundOpacity'])) +
-                        ')',
+                  // -----------------------------------------------------
+                  // 🎨 修改背景蒙版逻辑 (赛博朋克深色蒙版 + 模糊)
+                  // -----------------------------------------------------
+                  backgroundColor: 
+                    'rgba(0, 0, 0, ' + 
+                    (1 - Number(configs['site.backgroundOpacity'])) * 0.8 + // 强制深色，并微调透明度
+                    ')',
+                  backdropFilter: 'blur(3px)', // 增加高科技感模糊
                   zIndex: 1,
+                  // -----------------------------------------------------
                 },
               }}
             />
